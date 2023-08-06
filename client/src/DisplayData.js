@@ -52,44 +52,53 @@ function DisplayData() {
     <div class="bg-slate-500 min-h-screen overflow-hidden ">
       <div class="pt-10 flex justify-center">
         <div class="rounded-lg shadow-md p-4 mb-4">
-          <input
-            class="rounded-sm pr-3"
-            type="text"
-            placeholder="365 Days"
-            onChange={(event) => {
-              setMovieSearch(event.target.value);
-            }}
-          />
-          <button
-            class="rounded-lg pl-3 pr-3 ml-3 bg-amber-200"
-            onClick={() => {
-              fetchMovie({
-                variables: {
-                  name: movieSearch,
-                },
-              });
-            }}
-          >
-            <span class=" text-center justify-items-center">Get Data</span>
-          </button>
+          <div class="mb-2">
+            <input
+              class="rounded-sm pr-3"
+              type="text"
+              placeholder="365 Days"
+              onChange={(event) => {
+                setMovieSearch(event.target.value);
+              }}
+            />
+            <button
+              class="rounded-lg pl-3 pr-3 ml-3 bg-green-800"
+              onClick={() => {
+                fetchMovie({
+                  variables: {
+                    name: movieSearch,
+                  },
+                });
+              }}
+            >
+              <span class="text-center text-gray-200 justify-items-center">Search Data</span>
+            </button>
+          </div>
 
           {movieSearchData && (
-            <table class="table-auto">
-              <thead>
-                <tr>
-                  <th class="pr-4 text-center">Movie</th>
-                  <th class="pr-4 text-center">Publish</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="pr-4 text-center">{movieSearchData.movie.name}</td>
-                  <td class="pr-4 text-center">
-                    {movieSearchData.movie.yearPublish}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div>
+              <h1 class="text-gray-200 rounded-lg bg-slate-700 font-bold flex justify-center mb-1">
+                Movie Table
+              </h1>
+              <table class="table-auto">
+                <thead>
+                  <tr>
+                    <th class="text-gray-200 pr-4 text-center">Movie</th>
+                    <th class="text-gray-200 pr-4 text-center">Publish</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-sm text-ellipsis text-slate-900  pr-4 text-center">
+                      {movieSearchData.movie.name}
+                    </td>
+                    <td class="text-sm text-ellipsis text-slate-900 pr-4 text-center">
+                      {movieSearchData.movie.yearPublish}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           )}
 
           {movieError && <h1>Error fetching movie data</h1>}
@@ -99,22 +108,33 @@ function DisplayData() {
       <div class="pt-10 mb-0 flex justify-center">
         {data && (
           <div class="rounded-lg shadow-md p-4">
+            <h1 class="text-gray-200 rounded-lg bg-slate-700 font-bold flex justify-center mb-1">
+              Users Table
+            </h1>
             <table class="table-auto">
               <thead>
                 <tr>
-                  <th class="pr-4 text-center">Name</th>
-                  <th class="pr-4 text-center">Username</th>
-                  <th class="pr-4 text-center">Age</th>
-                  <th class="pr-4 text-center">Nationality</th>
+                  <th class="text-gray-200 pr-4 text-center">Name</th>
+                  <th class="text-gray-200 pr-4 text-center">Username</th>
+                  <th class="text-gray-200 pr-4 text-center">Age</th>
+                  <th class="text-gray-200 pr-4 text-center">Nationality</th>
                 </tr>
               </thead>
               <tbody>
                 {data.users.map((user) => (
                   <tr key={user.id}>
-                    <td class="pr-4 text-center">{user.name}</td>
-                    <td class="pr-4 text-center">{user.username}</td>
-                    <td class="pr-4 text-center">{user.age}</td>
-                    <td class="pr-4 text-center">{user.nationality}</td>
+                    <td class=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
+                      {user.name}
+                    </td>
+                    <td class=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
+                      {user.username}
+                    </td>
+                    <td class=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
+                      {user.age}
+                    </td>
+                    <td class=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
+                      {user.nationality}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -125,17 +145,22 @@ function DisplayData() {
 
       <div class="pt-10 mb-0 flex justify-center">
         <div class="rounded-lg shadow-md p-4">
+          <h1 class="text-gray-200 rounded-lg bg-slate-700 font-bold flex justify-center mb-1">
+            Movies Table
+          </h1>
           <table class="table-auto">
             <thead>
               <tr>
-                <th class="pr-4 text-center">Movies</th>
+                <th class="text-gray-200 pr-4 text-center">Movies</th>
               </tr>
             </thead>
             <tbody>
               {dataMovie &&
                 dataMovie.movies.map((movie) => (
                   <tr key={movie.id}>
-                    <td class="pr-4 text-center">{movie.name}</td>
+                    <td class="text-sm  text-slate-900 text-ellipsis pr-4 text-center">
+                      {movie.name}
+                    </td>
                   </tr>
                 ))}
             </tbody>
