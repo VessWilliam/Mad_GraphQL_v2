@@ -49,53 +49,99 @@ function DisplayData() {
   }
 
   return (
-    <div>
-      <div>
-        <input
-          text="text"
-          placeholder="365 Days"
-          onChange={(event) => {
-            setMovieSearch(event.target.value);
-          }}
-        ></input>
-        <button
-          onClick={() => {
-            fetchMovie({
-              variables: {
-                name: movieSearch,
-              },
-            });
-          }}
-        >
-          Get Data
-        </button>
-        <div>
+    <div class="bg-slate-500 min-h-screen overflow-hidden ">
+      <div class="pt-10 flex justify-center">
+        <div class="rounded-lg shadow-md p-4 mb-4">
+          <input
+            class="rounded-sm pr-3"
+            type="text"
+            placeholder="365 Days"
+            onChange={(event) => {
+              setMovieSearch(event.target.value);
+            }}
+          />
+          <button
+            class="rounded-lg pl-3 pr-3 ml-3 bg-amber-200"
+            onClick={() => {
+              fetchMovie({
+                variables: {
+                  name: movieSearch,
+                },
+              });
+            }}
+          >
+            <span class=" text-center justify-items-center">Get Data</span>
+          </button>
+
           {movieSearchData && (
-            <div>
-              <p>Movie Name: {movieSearchData.movie.name}</p>
-              <p>Publish Year: {movieSearchData.movie.yearPublish}</p>{" "}
-            </div>
+            <table class="table-auto">
+              <thead>
+                <tr>
+                  <th class="pr-4 text-center">Movie</th>
+                  <th class="pr-4 text-center">Publish</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="pr-4 text-center">{movieSearchData.movie.name}</td>
+                  <td class="pr-4 text-center">
+                    {movieSearchData.movie.yearPublish}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           )}
-          {movieError && <h1>Error fetching data</h1>}
+
+          {movieError && <h1>Error fetching movie data</h1>}
         </div>
       </div>
 
-      {data &&
-        data.users.map((users) => {
-          return (
-            <div>
-              <p>Name: {users.name}</p>
-              <p>Username: {users.username}</p>
-              <p>Age: {users.age}</p>
-              <p>Nationality: {users.nationality}</p>
-            </div>
-          );
-        })}
+      <div class="pt-10 mb-0 flex justify-center">
+        {data && (
+          <div class="rounded-lg shadow-md p-4">
+            <table class="table-auto">
+              <thead>
+                <tr>
+                  <th class="pr-4 text-center">Name</th>
+                  <th class="pr-4 text-center">Username</th>
+                  <th class="pr-4 text-center">Age</th>
+                  <th class="pr-4 text-center">Nationality</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.users.map((user) => (
+                  <tr key={user.id}>
+                    <td class="pr-4 text-center">{user.name}</td>
+                    <td class="pr-4 text-center">{user.username}</td>
+                    <td class="pr-4 text-center">{user.age}</td>
+                    <td class="pr-4 text-center">{user.nationality}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
 
-      {dataMovie &&
-        dataMovie.movies.map((movie) => {
-          return <p>Movies Name: {movie.name}</p>;
-        })}
+      <div class="pt-10 mb-0 flex justify-center">
+        <div class="rounded-lg shadow-md p-4">
+          <table class="table-auto">
+            <thead>
+              <tr>
+                <th class="pr-4 text-center">Movies</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dataMovie &&
+                dataMovie.movies.map((movie) => (
+                  <tr key={movie.id}>
+                    <td class="pr-4 text-center">{movie.name}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
