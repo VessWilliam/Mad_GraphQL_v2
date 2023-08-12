@@ -4,11 +4,18 @@ import { useLazyQuery, useQuery, gql, useMutation } from "@apollo/client";
 const QUERY_ALL_USERS = gql`
   query GetAllpeople {
     users {
-      id
-      name
-      nationality
-      age
-      username
+      ... on usersSucessResult {
+        users {
+          id
+          name
+          nationality
+          age
+          username
+        }
+      }
+      ... on UserErrorResult {
+        message
+      }
     }
   }
 `;
@@ -16,8 +23,8 @@ const QUERY_ALL_USERS = gql`
 const CREATE_USER_MUTATION = gql`
   mutation CreateUsers($input: CreateUser!) {
     createUser(input: $input) {
-      name
       id
+      name
     }
   }
 `;
@@ -25,6 +32,7 @@ const CREATE_USER_MUTATION = gql`
 const QUERY_ALL_MOVIE = gql`
   query GetMovies {
     movies {
+      id
       name
     }
   }
@@ -33,6 +41,7 @@ const QUERY_ALL_MOVIE = gql`
 const QUERY_MOVIE = gql`
   query Movie($name: String!) {
     movie(name: $name) {
+      id
       name
       yearPublish
     }
@@ -54,6 +63,10 @@ function DisplayData() {
 
   const [createUser] = useMutation(CREATE_USER_MUTATION);
 
+  // if (data) {
+  //   console.log(data);
+  // }
+
   if (loading) {
     return <h1>LOADING DATA...</h1>;
   }
@@ -65,15 +78,15 @@ function DisplayData() {
   }
 
   return (
-    <div class="bg-slate-500 min-h-screen overflow-hidden ">
-      <div class="pt-10 flex justify-center">
-        <div class="rounded-lg shadow-md p-4 mb-2">
-          <ul class="flex flex-col mb-2">
+    <div className="bg-slate-500 min-h-screen overflow-hidden ">
+      <div className="pt-10 flex justify-center">
+        <div className="rounded-lg shadow-md p-4 mb-2">
+          <ul className="flex flex-col mb-2">
             <input
               onChange={(event) => {
                 setName(event.target.value);
               }}
-              class="flex flex-col mb-2 rounded-lg"
+              className="flex flex-col mb-2 rounded-lg"
               type="text"
               placeholder=" Name..."
             />
@@ -81,7 +94,7 @@ function DisplayData() {
               onChange={(event) => {
                 setUsername(event.target.value);
               }}
-              class="flex flex-col mb-2 rounded-lg"
+              className="flex flex-col mb-2 rounded-lg"
               type="text"
               placeholder=" UserName..."
             />
@@ -89,7 +102,7 @@ function DisplayData() {
               onChange={(event) => {
                 setAge(event.target.value);
               }}
-              class="flex flex-col mb-2 rounded-lg"
+              className="flex flex-col mb-2 rounded-lg"
               type="number"
               placeholder=" Age..."
             />
@@ -97,12 +110,12 @@ function DisplayData() {
               onChange={(event) => {
                 setNationality(event.target.value.toUpperCase());
               }}
-              class="flex flex-col mb-2 rounded-lg"
+              className="flex flex-col mb-2 rounded-lg"
               type="text"
               placeholder=" Nationality..."
             />
             <button
-              class="rounded-lg pl-3 pr-3 ml-3 bg-green-800"
+              className="rounded-lg pl-3 pr-3 ml-3 bg-green-800"
               onClick={() => {
                 createUser({
                   variables: {
@@ -113,7 +126,7 @@ function DisplayData() {
                 refetch();
               }}
             >
-              <span class="text-center text-gray-200 justify-items-center">
+              <span className="text-center text-gray-200 justify-items-center">
                 Create User
               </span>
             </button>
@@ -121,11 +134,11 @@ function DisplayData() {
         </div>
       </div>
 
-      <div class="pt-10 flex justify-center">
-        <div class="rounded-lg shadow-md p-2 mb-4">
-          <div class="mb-2">
+      <div className="pt-10 flex justify-center">
+        <div className="rounded-lg shadow-md p-2 mb-4">
+          <div className="mb-2">
             <input
-              class="rounded-lg pr-3"
+              className="rounded-lg pr-3"
               type="text"
               placeholder=" Movie Name"
               onChange={(event) => {
@@ -133,7 +146,7 @@ function DisplayData() {
               }}
             />
             <button
-              class="rounded-lg pl-3 pr-3 ml-3 bg-green-800"
+              className="rounded-lg pl-3 pr-3 ml-3 bg-green-800"
               onClick={() => {
                 fetchMovie({
                   variables: {
@@ -142,7 +155,7 @@ function DisplayData() {
                 });
               }}
             >
-              <span class="text-center text-gray-200 justify-items-center">
+              <span className="text-center text-gray-200 justify-items-center">
                 Search Data
               </span>
             </button>
@@ -150,22 +163,22 @@ function DisplayData() {
 
           {movieSearchData && (
             <div>
-              <h1 class="text-gray-200 rounded-lg bg-slate-700 font-bold flex justify-center mb-1">
+              <h1 className="text-gray-200 rounded-lg bg-slate-700 font-bold flex justify-center mb-1">
                 Movie Table
               </h1>
-              <table class="table-auto">
+              <table className="table-auto">
                 <thead>
                   <tr>
-                    <th class="text-gray-200 pr-4 text-center">Movie</th>
-                    <th class="text-gray-200 pr-4 text-center">Publish</th>
+                    <th className="text-gray-200 pr-4 text-center">Movie</th>
+                    <th className="text-gray-200 pr-4 text-center">Publish</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td class="text-sm text-ellipsis text-slate-900  pr-4 text-center">
+                  <tr key={movieSearchData.id}>
+                    <td className="text-sm text-ellipsis text-slate-900  pr-4 text-center">
                       {movieSearchData.movie.name}
                     </td>
-                    <td class="text-sm text-ellipsis text-slate-900 pr-4 text-center">
+                    <td className="text-sm text-ellipsis text-slate-900 pr-4 text-center">
                       {movieSearchData.movie.yearPublish}
                     </td>
                   </tr>
@@ -178,34 +191,36 @@ function DisplayData() {
         </div>
       </div>
 
-      <div class="pt-10 mb-0 flex justify-center">
+      <div className="pt-10 mb-0 flex justify-center">
         {data && (
-          <div class="rounded-lg shadow-md p-2">
-            <h1 class="text-gray-200 rounded-lg bg-slate-700 font-bold flex justify-center mb-1">
+          <div className="rounded-lg shadow-md p-2">
+            <h1 className="text-gray-200 rounded-lg bg-slate-700 font-bold flex justify-center mb-1">
               Users Table
             </h1>
-            <table class="table-auto">
+            <table className="table-auto">
               <thead>
                 <tr>
-                  <th class="text-gray-200 pr-4 text-center">Name</th>
-                  <th class="text-gray-200 pr-4 text-center">Username</th>
-                  <th class="text-gray-200 pr-4 text-center">Age</th>
-                  <th class="text-gray-200 pr-4 text-center">Nationality</th>
+                  <th className="text-gray-200 pr-4 text-center">Name</th>
+                  <th className="text-gray-200 pr-4 text-center">Username</th>
+                  <th className="text-gray-200 pr-4 text-center">Age</th>
+                  <th className="text-gray-200 pr-4 text-center">
+                    Nationality
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {data.users.map((user) => (
+                {data.users.users.map((user) => (
                   <tr key={user.id}>
-                    <td class=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
+                    <td className=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
                       {user.name}
                     </td>
-                    <td class=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
+                    <td className=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
                       {user.username}
                     </td>
-                    <td class=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
+                    <td className=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
                       {user.age}
                     </td>
-                    <td class=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
+                    <td className=" text-sm text-ellipsis  text-slate-900 pr-4 text-center">
                       {user.nationality}
                     </td>
                   </tr>
@@ -216,22 +231,22 @@ function DisplayData() {
         )}
       </div>
 
-      <div class="pt-10 mb-0 flex justify-center">
-        <div class="rounded-lg shadow-md p-2">
-          <h1 class="text-gray-200 rounded-lg bg-slate-700 font-bold flex justify-center mb-1">
+      <div className="pt-10 mb-0 flex justify-center">
+        <div className="rounded-lg shadow-md p-2">
+          <h1 className="text-gray-200 rounded-lg bg-slate-700 font-bold flex justify-center mb-1">
             Movies Table
           </h1>
-          <table class="table-auto">
+          <table className="table-auto">
             <thead>
               <tr>
-                <th class="text-gray-200 pr-4 text-center">Movies</th>
+                <th className="text-gray-200 pr-4 text-center">Movies</th>
               </tr>
             </thead>
             <tbody>
               {dataMovie &&
                 dataMovie.movies.map((movie) => (
                   <tr key={movie.id}>
-                    <td class="text-sm  text-slate-900 text-ellipsis pr-4 text-center">
+                    <td className="text-sm  text-slate-900 text-ellipsis pr-4 text-center">
                       {movie.name}
                     </td>
                   </tr>

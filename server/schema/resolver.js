@@ -4,10 +4,12 @@ const _ = require("lodash");
 const resolvers = {
   Query: {
     //user resolver
-    users: () => {
-      return UserList;
+    users: (parent, args, context, info) => {
+      if (UserList) return { users: UserList };
+
+      return { message: "Yo , Have error!" };
     },
-    user: (parent, args) => {
+    user: (parent, args, context, info) => {
       const id = args.id;
       const user = _.find(UserList, { id: Number(id) });
       return user;
@@ -41,24 +43,36 @@ const resolvers = {
       return user;
     },
     updateUserName: (parent, args) => {
-      const {id, newUserName} = args.input;
+      const { id, newUserName } = args.input;
       let userUpdated;
       UserList.forEach((user) => {
         if (user.id === Number(id)) {
           console.log(user.username);
           user.username = newUserName;
           userUpdated = user;
-       
         }
       });
       return userUpdated;
     },
 
-    deleteUser: (parent, args) =>{
-        const id = args.id;
-        _.remove(UserList, (user)=> user.id === Number(id));
-        return null;
-    }
+    deleteUser: (parent, args) => {
+      const id = args.id;
+      _.remove(UserList, (user) => user.id === Number(id));
+      return null;
+    },
+  },
+
+  UsersResult: {
+    __resolveType(obj) {
+      if (obj.users) {
+        return "usersSucessResult";
+      }
+      if (obj.message) {
+        return "UserErrorResult";
+      }
+
+      return null;
+    },
   },
 };
 

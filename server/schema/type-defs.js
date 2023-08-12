@@ -19,8 +19,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    users: [User!]!
-    user(id: ID!): User
+    users: UsersResult
+    user(id: ID!): User!
     movies: [Movie!]!
     movie(name: String!): Movie!
   }
@@ -31,10 +31,10 @@ const typeDefs = gql`
     age: Int!
     nationality: Nationality = ISKANDAR
   }
-  
+
   input updateUserName {
-      id: ID!
-      newUserName: String!
+    id: ID!
+    newUserName: String!
   }
 
   type Mutation {
@@ -50,6 +50,16 @@ const typeDefs = gql`
     ISKANDAR
     ALASKA
   }
+
+  type usersSucessResult {
+    users: [User!]!
+  }
+
+  type UserErrorResult {
+    message: String!
+  }
+
+  union UsersResult = usersSucessResult | UserErrorResult
 `;
 
 module.exports = { typeDefs };
