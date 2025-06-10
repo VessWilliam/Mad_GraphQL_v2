@@ -1,3 +1,8 @@
-Familiarize with GraphQl Structure. Using Apollo lib to query "Fake Data" JSON schema act like Database.
-🐻🐻🐻
+# MAD_GraphQL_v2
+
+# 💡 Notes
+     Familiarize With GraphQl Structure. 
+     Using Apollo lib To Query "Fake Data" 
+     JSON Schema Act Like Database.
+
 
